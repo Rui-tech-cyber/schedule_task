@@ -7,6 +7,17 @@ import Rails from "@rails/ujs"
 import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
+import "bootstrap"
+import flatpickr from "flatpickr"
+import "flatpickr/dist/flatpickr.min.css"
+
+document.addEventListener("turbolinks:load", () => {
+  flatpickr(".datepicker", {
+    dateFormat: "Y/m/d",
+    locale: "ja"
+  });
+});
+
 
 Rails.start()
 Turbolinks.start()
