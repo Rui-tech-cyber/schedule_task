@@ -5,3 +5,10 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+Plan.create!(
+  title: "テスト予定",
+  start_date: Date.today,
+  end_date: Date.today + 1,
+  all_day: true,
+  memo: "これはテストです。"
+)

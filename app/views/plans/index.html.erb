@@ -1,0 +1,75 @@
+<h1 class="mb-4">予定一覧</h1>
+
+<div class="mb-3">
+  <p>本日の日付: <%= Time.current.in_time_zone('Asia/Tokyo').strftime('%Y/%m/%d') %></p>
+  <p>予定の合計数: <%= @plans.count %></p>
+</div>
+
+<table class="table table-striped table-bordered">
+  <thead class="thead-dark">
+    <tr>
+      <th>ID</th>
+      <th>タイトル</th>
+      <th>開始日</th>
+      <th>終了日</th>
+      <th>終日</th>
+      <th>更新日時</th>
+      <th colspan = "3">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @plans.each do |plan| %>
+      <tr>
+        <td><%= plan.id %></td>
+        <td><%= plan.title %></td>
+
+        <!-- 日付はyyyy/mm/ddで表示 -->
+        <td><%= plan.start_date.strftime('%Y/%m/%d') %></td>
+        <td><%= plan.end_date.strftime('%Y/%m/%d') %></td>
+
+        <!-- 終日がtrueなら◯、falseなら空欄 -->
+        <td><%= plan.all_day? ? '◯' : '' %></td>
+
+        <!-- 更新日時をyyyy/mm/dd hh:mmで表示 -->
+        <td><%= plan.updated_at.in_time_zone('Asia/Tokyo').strftime('%Y/%m/%d %H:%M') %></td>
+
+        <!-- 詳細リンク -->
+        <td><%= link_to '詳細', plan_path(plan), class: "btn btn-sm btn-info" %></td>
+
+        <!-- 編集リンク -->
+        <td><%= link_to '編集', edit_plan_path(plan), class: "btn btn-sm btn-warning" %></td>
+
+        <!-- 削除ボタン-->
+        <td>
+          <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= plan.id %>">
+            削除
+          </button>
+
+          <!-- 削除確認 -->
+          <div class="modal fade" id="deleteModal<%= plan.id %>" tabindex="-1" aria-labelledby="modalLabel<%= plan.id %>" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalLabel<%= plan.id %>">削除の確認</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                </div>
+                <div class="modal-body">
+                  この予定を削除しますか？
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                  <%= form_with url: plan_path(plan), method: :delete, local: true do %>
+                    <%= submit_tag "削除する", class: "btn btn-danger" %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<!-- 新しい予定の追加リンク -->
+<%= link_to '新規予定を追加', new_plan_path, class: "btn btn-primary" %>
